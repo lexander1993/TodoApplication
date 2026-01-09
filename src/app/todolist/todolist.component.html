@@ -1,0 +1,86 @@
+<div class="container">
+    <h1 class="text-center my-4">To-Do Application</h1>
+  
+    <form id="submitForm" (ngSubmit)="onSubmit(taskForm)" #taskForm="ngForm">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="task"
+            placeholder="Enter task"
+            ngModel
+            name="taskName"
+            required
+          />
+          <small
+            *ngIf="taskForm.invalid && taskForm.dirty"
+            id="errorMessage"
+            class="form-text text-danger"
+            >Required field</small
+          >
+        </div>
+        <button [disabled]="taskForm.invalid" id="submitButton" type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <br>
+  
+    <table class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Task</th>
+          <th scope="col" class="text-center">Completed</th>
+          <th scope="col" class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of tasks; index as i">
+            <td>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="tasks[i].taskName"
+                    [ngClass]="{ 'text-decoration-line-through': t.isCompleted }"
+                    [readOnly]="!t.isEditable"
+                  />
+                </div>
+              </td>
+              <td class="text-center">
+                <input
+                  id="myCheckbox"
+                  type="checkbox"
+                  [(ngModel)]="tasks[i].isCompleted"
+                  (change)="toggleCompletion(t.id, i, t.isCompleted)"
+                />
+              </td>
+          <td class="text-center">
+            <div class="btn-group">
+              <button
+                id="edit"
+                class="btn btn-primary btn-sm"
+                (click)="editTask(i)"
+                [disabled]="t.isCompleted || t.isEditable"
+              >
+                Edit
+              </button>
+              <button
+                id="save"
+                class="btn btn-warning btn-sm"
+                (click)="saveTask(t.id, i, tasks[i].taskName)"
+                [disabled]="!t.isEditable"
+              >
+                Save
+              </button>
+              <button
+                id="delete"
+                class="btn btn-danger btn-sm"
+                (click)="deleteTask(t.id)"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
